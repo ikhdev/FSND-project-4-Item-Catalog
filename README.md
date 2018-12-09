@@ -1,11 +1,11 @@
 # FSND-project-4-Item-Catalog
 
 ## Skills:
-1.Python 
-2.HTML 
-3.CSS 
-4.OAuth 
-5.Flask Framework
+1.Python <br />
+2.HTML <br />
+3.CSS <br />
+4.OAuth <br />
+5.Flask Framework<br />
 
 ## Dependencies:
 -[Vagrant](https://www.vagrantup.com/)
