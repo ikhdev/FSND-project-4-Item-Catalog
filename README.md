@@ -32,4 +32,4 @@ Category Items JSON: ```/category/<int:ID>/items/JSON``` - Lists specific catego
 Category Item JSON: ```/catalog/JSON``` - Lists specific category item details.<br />
 <br />
 ## Screenshots
-![alt text](https://raw.githubusercontent.com/ikhdev/FSND-project-4-Item-Catalog/branch/path/to/1.png)
+![alt text](https://raw.githubusercontent.com/ikhdev/FSND-project-4-Item-Catalog/screenshots/1.png)
