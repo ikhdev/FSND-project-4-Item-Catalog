@@ -1,74 +1,164 @@
-<!DOCTYPE html>
 <html>
-<head>
 
-  <!--LOAD PRE-REQUISITES FOR GOOGLE SIGN IN -->
-   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js">
-  </script>
-  <link rel=stylesheet type=text/css href="{{ url_for('static', filename='styles.css') }}">
+  <style>
+  body {
+    background-color: #ffffff;
+  }
+  a:link, a:visited {
+  font-size: 22px;
+  color: #05b5e2;
+  text-decoration: none;
+  }
+  a:hover, a:active{
+    color: #5a5858;
+    text-decoration: none;
+  }
+  table {
+  border-collapse: collapse;
+  width: 100%;
+}
 
-<script src="//apis.google.com/js/platform.js?onload=start"> </script>
+th, td {
+  padding: 8px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+tr:hover {background-color:#e6e6e6;}
+  #outer {
+  width: 100%;
+  text-align: center;
+  }
+  #inner {
+  display: inline-block;
+  }
+  .header{
+    background-color: #f1f1f1;
+    text-align: center;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    padding: 35px;
+    margin-top: -20px;
+    margin-left: -20px;
+    margin-right: -20px;
+    margin-bottom: 20px;
+  }
+  .loginBar{
+    float: right;
+  }
+  .message {
+    color: #81C784;
+    font-size: 20px;
+    font-weight: 2000;
+    margin-bottom: 20px;
+  }
+  .box{
+    background-color: #f2f2f2;
+    min-height: 200px;
+    min-width: 800px;
+    display: inline-block;
+    padding: 15px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    margin-bottom: 20px;
+  }
+  .footer{
+  margin-bottom: 20px;
+  }
 
-<!-- END PRE-REQUISITES FOR GOOGLE SIGN IN -->
+  </style>
 
 
-</head>
+  <head>
 
 
-<body>
+    <!--LOAD PRE-REQUISITES FOR GOOGLE SIGN IN -->
+     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+     <script src="//apis.google.com/js/platform.js?onload=start"> </script>
+
+  <!-- END PRE-REQUISITES FOR GOOGLE SIGN IN -->
+
+	</head>
+
+  <body>
+    <div class="header">
+    <a href="{{url_for('displayCategory')}}">
+      <strong style="letter-spacing: 1.5px;font-size:20px">udacity | Item catalog</strong>
+    </a>
+
+    <div class="loginBar">
+      {%if 'username' not in session %}
+      <a style="float:left; color:#ffffff; background:#05b5e2; padding:7px;border-radius:10px;" href="{{url_for('showLogin')}}">
+        Login
+      </a>
+      {% else %}
+      <a style="float:left; color:#ffffff; background:#05b5e2; padding:7px;border-radius:10px;" href="{{url_for('gdisconnect')}}">
+        Logout
+      </a>
+      {% endif %}
+    </div>
+
+    </div>
+
+</br></br>
+
+</br>
+
+    <div id="outer">
+      <div id="inner" class="box">
+        <h2>Log in : </h2>
+        </br>
+        <div>
+            <div id="signinButton">
+            <span class="g-signin"
+              data-scope="openid email"
+              data-clientid="226813501017-8r0tfs0s1iq8s698u95qph3of8o7uo0n.apps.googleusercontent.com"
+              data-redirecturi="postmessage"
+              data-accesstype="offline"
+              data-cookiepolicy="single_host_origin"
+              data-callback="signInCallback"
+              data-approvalprompt="force">
+            </span>
+          </div>
+        </div>
+      </br>
 
 
-<!-- GOOGLE PLUS SIGN IN BUTTON-->
+    </br></br>
+      <a style="float: left;color:#ffffff; background:#05b5e2; font-size: 15px; padding:5px; border-radius:5px;" href= '{{url_for('displayCategory')}}'>Cancel</a>
 
-<div>
-    <div id="signinButton">
-    <span class="g-signin"
-      data-scope="openid email"
-      data-clientid="226813501017-8r0tfs0s1iq8s698u95qph3of8o7uo0n.apps.googleusercontent.com"
-      data-redirecturi="postmessage"
-      data-accesstype="offline"
-      data-cookiepolicy="single_host_origin"
-      data-callback="signInCallback"
-      data-approvalprompt="force">
-    </span>
-  </div>
-</div>
+        </br>
+      </div>
 
+    </div>
 
+    <script>
+    function signInCallback(authResult) {
+      if (authResult['code']) {
+        // Hide the sign-in button now that the user is authorized
+        $('#signinButton').attr('style', 'display: none');
+        // Send the one-time-use code to the server, if the server responds, write a 'login successful' message to the web page and then redirect back to the main restaurants page
+        $.ajax({
+          type: 'POST',
+          url: '/gconnect?state={{STATE}}',
+          processData: false,
+          data: authResult['code'],
+          contentType: 'application/octet-stream; charset=utf-8',
+          success: function(result) {
+            // Handle or verify the server response if necessary.
+            if (result) {
+              $('#result').html('Login Successful!</br>'+ result + '</br>Redirecting...')
+             setTimeout(function() {
+              window.location.href = "/";
+             }, 4000);
 
+          } else if (authResult['error']) {
+        console.log('There was an error: ' + authResult['error']);
+      } else {
+            $('#result').html('Failed to make a server-side call. Check your configuration and console.');
+             }
+          }
 
-        <script>
-        function signInCallback(authResult) {
-          if (authResult['code']) {
-            // Hide the sign-in button now that the user is authorized
-            $('#signinButton').attr('style', 'display: none');
-            // Send the one-time-use code to the server, if the server responds, write a 'login successful' message to the web page and then redirect back to the main restaurants page
-            $.ajax({
-              type: 'POST',
-              url: '/gconnect?state={{STATE}}',
-              processData: false,
-              data: authResult['code'],
-              contentType: 'application/octet-stream; charset=utf-8',
-              success: function(result) {
-                // Handle or verify the server response if necessary.
-                if (result) {
-                  $('#result').html('Login Successful!</br>'+ result + '</br>Redirecting...')
-                 setTimeout(function() {
-                  window.location.href = "/";
-                 }, 4000);
-
-              } else if (authResult['error']) {
-            console.log('There was an error: ' + authResult['error']);
-          } else {
-                $('#result').html('Failed to make a server-side call. Check your configuration and console.');
-                 }
-              }
-
-          }); } }
-        </script>
-
-<!--END GOOGLE PLUS SIGN IN BUTTON -->
+      }); } }
+    </script>
 
   </body>
 
-  </html>
+</html>

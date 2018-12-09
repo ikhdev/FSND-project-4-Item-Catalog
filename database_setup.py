@@ -2,7 +2,7 @@ import os
 import sys
 from sqlalchemy import Column, ForeignKey, Integer, String
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import relationship, backref
+from sqlalchemy.orm import relationship, backref, sessionmaker
 from sqlalchemy import create_engine
 
 Base = declarative_base()
@@ -24,6 +24,8 @@ class Category(Base):
     name = Column(String(250), nullable=False)
     user_id = Column(Integer, ForeignKey('user.id'))
     user = relationship(User, backref="category")
+    item1 = relationship("CatalogItem",
+                         cascade="all,delete", backref="category2")
 
     @property
     def serialize(self):
@@ -41,7 +43,8 @@ class CatalogItem(Base):
     description = Column(String(250))
     price = Column(String(8))
     category_id = Column(Integer, ForeignKey('category.id'))
-    category = relationship("Category")
+    category = relationship(Category,
+                            backref=backref("item", cascade="all,delete"))
     user_id = Column(Integer, ForeignKey('user.id'))
     user = relationship(User, backref="catalog_item")
 

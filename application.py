@@ -11,7 +11,7 @@ from flask import Flask
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from database_setup import Base, Category, CatalogItem, User
-from flask import Flask, request,render_template
+from flask import Flask, request, render_template
 from flask import redirect, url_for, flash, jsonify
 app = Flask(__name__)
 
@@ -231,25 +231,13 @@ def displayCategory():
     categories = session.query(Category).all()
     return render_template('displayCategory.html', categories=categories)
 
-# Display all Items
-
-
-@app.route('/category/<int:ID>/')
-@app.route('/category/<int:ID>/items/')
-def displayItem(ID):
-    categories = session.query(Category).filter_by(id=ID).one()
-    items = session.query(CatalogItem).filter_by(category_id=ID)
-    return render_template(
-        'displayItem.html',
-        categories=categories,
-        items=items)
-
-
 #################################################
 # CRUD for Category
 #################################################
 
 # add new Category
+
+
 @app.route('/category/new/', methods=['GET', 'POST'])
 def newCategory():
     if 'username' not in login_session:
@@ -258,7 +246,8 @@ def newCategory():
         if not request.form['name']:
             flash('Please add name')
             return redirect(url_for('newCategory'))
-        newCategory = Category(name=request.form['name'])
+        newCategory = Category(
+            name=request.form['name'], user_id=login_session['user_id'])
         session.add(newCategory)
         session.commit()
         flash("new category created!")
@@ -275,6 +264,8 @@ def editCategory(ID):
     if 'username' not in login_session:
         return redirect('/login')
     editedCategory = session.query(Category).filter_by(id=ID).one()
+    if editedCategory.user_id != login_session['user_id']:
+        return "<script>function myFunction() {alert('You are not authorized to edit this category. Please create your own category in order to edit.');}</script><body onload='myFunction()'>"
     if request.method == 'POST':
         if not request.form['name']:
             flash('Can not be empty , enter other name in the blank')
@@ -299,6 +290,8 @@ def deleteCategory(ID):
     if 'username' not in login_session:
         return redirect('/login')
     categoryToDelete = session.query(Category).filter_by(id=ID).one()
+    if categoryToDelete.user_id != login_session['user_id']:
+        return "<script>function myFunction() {alert('You are not authorized to delete this category. Please create your own category in order to delete.');}</script><body onload='myFunction()'>"
     if request.method == 'POST':
 
         session.delete(categoryToDelete)
@@ -314,6 +307,20 @@ def deleteCategory(ID):
 # CRUD for Item
 #################################################
 
+# Display all Items
+
+
+@app.route('/category/<int:ID>/')
+@app.route('/category/<int:ID>/items/')
+def displayItem(ID):
+    categories = session.query(Category).filter_by(id=ID).one()
+    items = session.query(CatalogItem).filter_by(category_id=ID).all()
+    return render_template(
+        'displayItem.html',
+        categories=categories,
+        items=items)
+
+
 # New Item
 
 
@@ -322,6 +329,8 @@ def newItem(ID):
     categories = session.query(Category).filter_by(id=ID).one()
     if 'username' not in login_session:
         return redirect('/login')
+    if categories.user_id != login_session['user_id']:
+        return "<script>function myFunction() {alert('You are not authorized to edit this category. Please create your own category.');}</script><body onload='myFunction()'>"
     if request.method == 'POST':
         if not request.form['name']:
             flash('Can not be empty , enter other name in the blank')
@@ -330,7 +339,7 @@ def newItem(ID):
             name=request.form['name'],
             description=request.form['description'],
             price=request.form['price'],
-            category_id=ID)
+            category_id=ID, user_id=login_session['user_id'])
         session.add(newItem)
         session.commit()
         flash("new item created!")
@@ -347,15 +356,18 @@ def editItem(ID, itemID):
         return redirect('/login')
     categories = session.query(Category).filter_by(id=ID).one()
     editedItem = session.query(CatalogItem).filter_by(id=itemID).one()
+    if editedItem.user_id != login_session['user_id']:
+        return "<script>function myFunction() {alert('You are not authorized to edit this category. Please create your own category in order to edit.');}</script><body onload='myFunction()'>"
     if request.method == 'POST':
         if not request.form['name']:
             flash('Can not be empty , enter other name in the blank')
             return redirect(url_for('editItem',
                                     ID=ID, itemID=itemID))
-        if request.form['name'] and request.form['description'] and request.form['price']:
-
+        if request.form['name']:
             editedItem.name = request.form['name']
+        if request.form['description']:
             editedItem.description = request.form['description']
+        if request.form['price']:
             editedItem.price = request.form['price']
 
         session.add(editedItem)
@@ -379,6 +391,8 @@ def deleteItem(ID, itemID):
         return redirect('/login')
     categories = session.query(Category).filter_by(id=ID).one()
     itemToDelete = session.query(CatalogItem).filter_by(id=itemID).one()
+    if itemToDelete.user_id != login_session['user_id']:
+        return "<script>function myFunction() {alert('You are not authorized to delete this category. Please create your own category in order to delete.');}</script><body onload='myFunction()'>"
     if request.method == 'POST':
         session.delete(itemToDelete)
         session.commit()
