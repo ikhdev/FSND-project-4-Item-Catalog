@@ -19,7 +19,7 @@
 4.Launch the Vagrant VM ```vagrant up```.<br />
 5.Log into Vagrant VM ```vagrant ssh```.<br />
 6.Navigate to cd/vagrant as instructed in terminal<br />
-7.run ``` sudo pip install requests ```.<br />
+7.run ``` pip install requests ```.<br />
 8.Setup application database ```python database_setup.py ```.<br />
 9.fill the database ```python fakedata.py ```.<br />
 10.Run application using ```python application.py ```.<br />
