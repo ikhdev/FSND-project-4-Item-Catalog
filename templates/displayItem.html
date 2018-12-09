@@ -1,0 +1,146 @@
+<html>
+
+  <style>
+  body {
+    background-color: #ffffff;
+  }
+  a:link, a:visited {
+  font-size: 22px;
+  color: #05b5e2;
+  text-decoration: none;
+  }
+  a:hover, a:active{
+    color: #5a5858;
+    text-decoration: none;
+  }
+  table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+th, td {
+  padding: 8px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+tr:hover {background-color:#e6e6e6;}
+  #outer {
+  width: 100%;
+  text-align: center;
+  }
+  #inner {
+  display: inline-block;
+  }
+  .header{
+    background-color: #f1f1f1;
+    text-align: center;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    padding: 35px;
+    margin-top: -20px;
+    margin-left: -20px;
+    margin-right: -20px;
+    margin-bottom: 20px;
+  }
+  .loginBar{
+    float: right;
+  }
+  .message {
+    color: #81C784;
+    font-size: 20px;
+    font-weight: 2000;
+    margin-bottom: 20px;
+  }
+  .box{
+    background-color: #f2f2f2;
+    min-height: 200px;
+    min-width: 800px;
+    display: inline-block;
+    padding: 15px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    margin-bottom: 20px;
+  }
+  .footer{
+  margin-bottom: 20px;
+  }
+
+  </style>
+
+
+  <head>
+
+
+    <!--LOAD PRE-REQUISITES FOR GOOGLE SIGN IN -->
+     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+     <script src="//apis.google.com/js/platform.js?onload=start"> </script>
+
+  <!-- END PRE-REQUISITES FOR GOOGLE SIGN IN -->
+
+	</head>
+
+  <body>
+    <div class="header">
+    <a href="{{url_for('displayCategory')}}">
+      <strong style="letter-spacing: 1.5px;font-size:20px">udacity | Item catalog</strong>
+    </a>
+
+    <div class="loginBar">
+      {%if 'username' not in session %}
+      <a style="float:left; color:#ffffff; background:#05b5e2; padding:7px;border-radius:10px;" href="{{url_for('showLogin')}}">
+        Login
+      </a>
+      {% else %}
+      <a style="float:left; color:#ffffff; background:#05b5e2; padding:7px;border-radius:10px;" href="{{url_for('gdisconnect')}}">
+        Logout
+      </a>
+      {% endif %}
+    </div>
+
+    </div>
+
+</br></br>
+
+</br>
+  <div id="outer">
+    <div id="inner"  class="message">
+      {% with messages = get_flashed_messages() %}
+      {% if messages %}
+      {% for message in messages %}
+        <strong>{{message}}</strong>
+        {% endfor %}
+      {% endif %}
+      {% endwith %}
+    </div>
+  </div>
+</br>
+
+    <div id="outer">
+      <div id="inner" class="box">
+        <h1>{{categories.name}}</h1>
+      </br></br>
+      <table>
+        <tr>
+          <td style="font-size: 20px; font-weight:bold; text-align: center;"><p>Name</p></td>
+          <td style="font-size: 20px; font-weight:bold; text-align: center;"><p>Description</p></td>
+          <td style="font-size: 20px; font-weight:bold; text-align: center;"><p>Price</p></td>
+        </tr>
+        {% for i in items %}
+        <tr>
+          <td style="text-align: center;"><p>{{i.name}}</p></td>
+          <td style="text-align: center;"><p>{{i.description}}</p></td>
+          <td style="text-align: center;"><p>{{i.price}}</p></td>
+          <td><a style="float:left; color:#ffffff; background:#05b5e2; font-size: 15px; padding:5px; border-radius:5px;" href='{{url_for('editItem' , ID = categories.id , itemID = i.id) }}'>Edit</a></td>
+          <td><a style="float:left; color:#ffffff; background:#05b5e2; font-size: 15px; padding:5px; border-radius:5px;" href='{{url_for('deleteItem' , ID = categories.id, itemID = i.id) }}'>Delete</a></td>
+        </tr>
+        {% endfor %}
+      </table>
+        </br></br></br>
+      <a style="float:left; color:#ffffff; background:#05b5e2; font-size: 15px; padding:5px; border-radius:5px;" href = '{{url_for('newItem',ID = categories.id)}}'> Create New Item</a>
+    </br> </br>
+      <a style="float:left; color:#ffffff; background:#05b5e2; font-size: 15px; padding:5px; border-radius:5px;" href= '{{url_for('displayCategory', ID = categories.id)}}'>Back</a>
+      </div>
+
+    </div>
+
+  </body>
+
+</html>

@@ -1,0 +1,59 @@
+body {
+	background-color: #ffffff;
+}
+a:link, a:visited {
+font-size: 22px;
+color: #05b5e2;
+text-decoration: none;
+}
+a:hover, a:active{
+	color: #5a5858;
+	text-decoration: none;
+}
+table {
+border-collapse: collapse;
+width: 100%;
+}
+
+th, td {
+padding: 8px;
+text-align: left;
+border-bottom: 1px solid #ddd;
+}
+tr:hover {background-color:#e6e6e6;}
+#outer {
+width: 100%;
+text-align: center;
+}
+#inner {
+display: inline-block;
+}
+.header{
+	background-color: #f1f1f1;
+	text-align: center;
+	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+	padding: 35px;
+	margin-top: -20px;
+	margin-left: -20px;
+	margin-right: -20px;
+	margin-bottom: 20px;
+}
+.loginBar{
+	float: right;
+}
+.message {
+	color: #81C784;
+	font-size: 20px;
+	font-weight: 2000;
+	margin-bottom: 20px;
+}
+.box{
+	background-color: #f2f2f2;
+	display: inline-block;
+	padding: 15px;
+	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+	margin-bottom: 20px;
+}
+.footer{
+margin-bottom: 20px;
+}
