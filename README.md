@@ -8,9 +8,9 @@
 5.Flask Framework<br />
 <br />
 ## Dependencies:
--[Vagrant](https://www.vagrantup.com/)<br />
--[Udacity Vagrantfile](https://github.com/udacity/fullstack-nanodegree-vm)<br />
--[VirtualBox](https://www.virtualbox.org/wiki/Downloads)<br />
+[Vagrant](https://www.vagrantup.com/)<br />
+[Udacity Vagrantfile](https://github.com/udacity/fullstack-nanodegree-vm)<br />
+[VirtualBox](https://www.virtualbox.org/wiki/Downloads)<br />
 <br />
 ## How to Install
 1.Install Vagrant & VirtualBox.<br />
@@ -30,3 +30,5 @@ Catalog JSON: ```/catalog/JSON``` - lists all categories in the app.<br />
 Categories JSON: ```/category/<int:ID>/items/<int:itemID>/JSON``` - lists specific category items.<br />
 Category Items JSON: ```/category/<int:ID>/items/JSON``` - Lists specific category items list.<br />
 Category Item JSON: ```/catalog/JSON``` - Lists specific category item details.<br />
+<br />
+## Screenshots
